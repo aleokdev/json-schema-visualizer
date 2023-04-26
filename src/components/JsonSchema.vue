@@ -16,14 +16,14 @@
                   v-if="schema.examples != null && schema.examples.length > 0">example: {{ schema.examples[0] }}</span>
             <span class="tag default default" v-if="schema.default != null">default: {{ schema.default }}</span>
             <span class="tag default format" v-if="schema.format">({{ schema.format }})</span>
-            <span class="tag default minimum" v-if="schema.minimum">minimum:{{ schema.minimum }}</span>
+            <span class="tag default minimum" v-if="schema.minimum !== undefined">minimum:{{ schema.minimum }}</span>
             <span class="tag default exclusiveMinimum"
                   v-if="schema.exclusiveMinimum">(ex)minimum:{{ schema.exclusiveMinimum }}</span>
-            <span class="tag default maximum" v-if="schema.maximum">maximum:{{ schema.maximum }}</span>
+            <span class="tag default maximum" v-if="schema.maximum !== undefined">maximum:{{ schema.maximum }}</span>
             <span class="tag default exclusiveMaximum"
                   v-if="schema.exclusiveMaximum">(ex)maximum:{{ schema.exclusiveMaximum }}</span>
-            <span class="tag default minLength" v-if="schema.minLength">minimum length:{{ schema.minLength }}</span>
-            <span class="tag default maxLength" v-if="schema.maxLength">maximum length:{{ schema.maxLength }}</span>
+            <span class="tag default minLength" v-if="schema.minLength !== undefined">minimum length:{{ schema.minLength }}</span>
+            <span class="tag default maxLength" v-if="schema.maxLength !== undefined">maximum length:{{ schema.maxLength }}</span>
             <json-schema-props :value="schema" :level="currentLevel" :max-level="maxLevel"/>
         </span>
 
