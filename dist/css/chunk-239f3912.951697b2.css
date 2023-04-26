@@ -1,0 +1,1 @@
+.required-tag:after{color:#000;content:" and "}.required-tag:last-child:after{content:""}
