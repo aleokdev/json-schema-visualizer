@@ -24,7 +24,7 @@
                   v-if="schema.exclusiveMaximum">(ex)maximum:{{ schema.exclusiveMaximum }}</span>
             <span class="tag default minLength" v-if="schema.minLength !== undefined">minimum length:{{ schema.minLength }}</span>
             <span class="tag default maxLength" v-if="schema.maxLength !== undefined">maximum length:{{ schema.maxLength }}</span>
-            <json-schema-props :value="schema" :level="currentLevel" :max-level="maxLevel"/>
+            <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel"/>
         </span>
 
 
