@@ -50,9 +50,22 @@
 
   const urlParams = new URLSearchParams(window.location.search);
 
+  const correctRules = (value) => {
+    if (value["allOf"] !== undefined && value["allOf"].length === 1) {
+      value["$ref"] = value["allOf"][0]["$ref"];
+      value["allOf"] = undefined;
+    }
+    for(const child of Object.values(value)) {
+      if(typeof(child) === "object") {
+        correctRules(child);
+      }
+    }
+  }
+
   const parseRawInput = (value) => {
     try {
-      const schema = JSON.parse(value)
+      const schema = JSON.parse(value);
+      correctRules(schema);
       const error = null
       localStorage.setItem('schema', value)
       return {schema, error}
