@@ -86,8 +86,19 @@
         }
       }
     },
+    created: function() {
+      var vue = this;
+      if (urlParams.get('surl') != null) {
+        fetch(decodeURIComponent(urlParams.get('surl'))).then(r => r.text()).then(t => {
+          vue.rawSchema = t;
+          const {schema, error} = parseRawInput(t);
+          vue.schema = schema;
+          vue.error = error;
+        })
+      }
+    },
     data: function () {
-      let rawSchema = (urlParams.get('s') != null ? decodeURIComponent(urlParams.get('s')) : null) || localStorage.getItem('schema')
+      let rawSchema = urlParams.get('s') != null ? decodeURIComponent(urlParams.get('s')) : localStorage.getItem('schema');
       const {schema, error} = parseRawInput(rawSchema)
 
       const hideEditor = urlParams.get('hideEditor');
