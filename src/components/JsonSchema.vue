@@ -2,7 +2,7 @@
     <span v-if="schema.not != null">
         not <json-schema :value="schema.not" :level="level" :max-level="maxLevel"/>
     </span>
-  <div v-else class="json-schema-view" :class="{collapsed: isCollapsed}">
+  <div style="background: rgba(238,238,238,0.25)" v-else class="json-schema-view" :class="{collapsed: isCollapsed}">
     <!-- Primitive -->
     <span v-if="isPrimitive">
             <a class="title">
