@@ -9,8 +9,6 @@
                 <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
                       :class="{collapsed: isCollapsed}"></span>
                 {{ schema.title }}
-                    <span v-if="schema.description" class="hint--right hint hint--large"
-                          :aria-label="schema.description">ⓘ</span>
             </a>
             <span class="tag default example"
                   v-if="schema.examples != null && schema.examples.length > 0">example: {{ schema.examples[0] }}</span>
@@ -33,8 +31,7 @@
       <a class="title">
         <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
               :class="{collapsed: isCollapsed}"></span>
-        {{ schema.title }} <span v-if="schema.description" class="hint--right hint hint--large"
-                                 :aria-label="schema.description">ⓘ</span>
+        {{ schema.title }}
         <span class="opening bracket">[</span>
         <json-schema v-if="schema.items != null" :value="schema.items" :level="level + 1" :max-level="maxLevel"/>
         <span class="closing bracket" v-if="isCollapsed">]</span>
@@ -53,8 +50,7 @@
           v-if="isCollapsible"
           @click="toggleCollapse"
           class="toggle-handle" :class="{collapsed: isCollapsed}"></span>
-        {{ schema.title }} <span v-if="schema.description" class="hint--right hint hint--large"
-                                 :aria-label="schema.description">ⓘ</span>
+        {{ schema.title }}
         <span class="opening brace">{</span>
         <span class="tag default" style="margin-left:5px"
               v-if="isCollapsed && getParentExample != null">{{ getParentExample }}</span>
@@ -66,7 +62,7 @@
           getParentExample
         }}</span>
       <div class="property" v-for="(property, propertyName) in schema.properties" :key="propertyName">
-                    <span class="name">
+                    <span class="name" :class="{ 'hint--right': property.description != null, 'hint': property.description != null, 'hint--large': property.description != null }" :aria-label="property.description">
                                         <component v-if="property.type != 'null' && typeof(property.type) === 'string'"
                                                    :is="`${property.type}-icon`"
                                                    class="property-type" :aria-label="property.type"
@@ -213,6 +209,7 @@ export default {
 <style lang="scss">
 @import '~bulma/sass/utilities/_all';
 @import '~bulma/sass/grid/columns';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
 
 $indent: 7px;
 $font-size: 14px;
@@ -226,14 +223,13 @@ $required: #F00;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-family: 'Roboto', sans-serif;
   font-size: 0;
+  font-weight: 300;
   display: table-cell;
 
   .hint {
-    font-size: 12px;
-    font-weight: bold;
-    margin-right: 4px
+    text-decoration: underline dotted;
   }
 
   span.collapsible-indicator {
