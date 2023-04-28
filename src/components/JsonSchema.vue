@@ -194,10 +194,10 @@ export default {
       this.currentLevel = 0
     },
     isRequired: function (property, name) {
-      const parent = this.$parent.schema
+      const schema = this.schema
 
-      if (parent && Array.isArray(parent.required) && name != null) {
-        return parent.required.includes(name)
+      if (schema && Array.isArray(schema.required) && name != null) {
+        return schema.required.includes(name)
       }
 
       return false
