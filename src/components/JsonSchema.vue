@@ -51,6 +51,7 @@
           @click="toggleCollapse"
           class="toggle-handle" :class="{collapsed: isCollapsed}"></span>
         {{ schema.title }}
+        <span v-if="schema.description != null" style="padding-right: 5px;" :class="{ 'hint--right': schema.description != null, 'hint': schema.description != null, 'hint--large': schema.description != null }" :aria-label="schema.description">(?)</span>
         <span class="opening brace">{</span>
         <span class="tag default" style="margin-left:5px"
               v-if="isCollapsed && getParentExample != null">{{ getParentExample }}</span>
