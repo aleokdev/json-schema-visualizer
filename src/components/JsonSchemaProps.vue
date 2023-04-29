@@ -6,7 +6,13 @@
         </span>
         <p v-if="value.enum">
             <template v-if="Array.isArray(value.enum)">
-              <template v-if="value.enum.length > 0">
+              <template v-if="value.enum.length == 1">
+                <b>must be equal to </b>
+                <span v-for="(item, idx) in value.enum" :key="idx" class="tag default">
+                    {{JSON.stringify(item)}}
+                </span>
+              </template>
+              <template v-else-if="value.enum.length > 1">
                 <b>must be one of </b>
                 <span v-for="(item, idx) in value.enum" :key="idx" class="tag default">
                     {{JSON.stringify(item)}}
