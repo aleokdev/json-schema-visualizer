@@ -2,7 +2,7 @@
     <div id="app" class="columns is-gapless" style="margin:0;padding:0">
         <textarea v-if="showEditor" v-model.lazy="rawSchema" @change="changeInput($event.target.value)" placeholder="enter schema"
                   class="column is-one-third" style="margin:0 20px;min-height:500px"/>
-        <json-schema v-if="schema != null" v-model="schema" class="column" :max-level="maxLevel" style="padding-left:10px"/>
+        <json-schema v-if="schema != null" :key="rawSchema" v-model="schema" class="column" :max-level="maxLevel" style="padding-left:10px"/>
         <!--<span v-else>-->
           <!--<span v-if="error != null" style="color:red">-->
             <!--Error parsing JSON: {{error}}-->
@@ -66,8 +66,7 @@
     try {
       const schema = JSON.parse(value);
       correctRules(schema);
-      const error = null
-      localStorage.setItem('schema', value)
+      const error = null;
       return {schema, error}
     } catch (error) {
       return {error}
@@ -111,7 +110,7 @@
       }
     },
     data: function () {
-      let rawSchema = urlParams.get('s') != null ? decodeURIComponent(urlParams.get('s')) : localStorage.getItem('schema');
+      let rawSchema = urlParams.get('s') != null ? decodeURIComponent(urlParams.get('s')) : "{}";
       const {schema, error} = parseRawInput(rawSchema)
 
       const hideEditor = urlParams.get('hideEditor');
