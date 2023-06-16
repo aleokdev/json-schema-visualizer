@@ -19,3 +19,9 @@ import JsonSchema as 'src/components/JsonSchema'
 
 <json-schema :value="schema"/>
 ```
+
+#### Update Github Pages
+While on the `master` branch:
+```sh
+git subtree push --prefix dist origin gh-pages
+```
