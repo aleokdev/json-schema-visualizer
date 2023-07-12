@@ -1,110 +1,111 @@
 <template>
-    <span v-if="schema.not != null">
-        not <json-schema :value="schema.not" :level="level" :max-level="maxLevel"/>
-    </span>
-  <div style="background: rgba(238,238,238,0.25)" v-else class="json-schema-view" :class="{collapsed: isCollapsed}">
+  <span v-if="schema.not != null">
+    not <json-schema :value="schema.not" :level="level" :max-level="maxLevel" />
+  </span>
+  <div style="background: rgba(238,238,238,0.25)" v-else class="json-schema-view" :class="{ collapsed: isCollapsed }">
     <!-- Primitive -->
     <span v-if="isPrimitive">
-            <a class="title">
-                <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
-                      :class="{collapsed: isCollapsed}"></span>
-                {{ schema.title }}
-            </a>
-            <span class="tag default example"
-                  v-if="schema.examples != null && schema.examples.length > 0">example: {{ schema.examples[0] }}</span>
-            <span class="tag default default" v-if="schema.default != null">default: {{ schema.default }}</span>
-            <span class="tag default format" v-if="schema.format">({{ schema.format }})</span>
-            <span class="tag default minimum" v-if="schema.minimum !== undefined">minimum:{{ schema.minimum }}</span>
-            <span class="tag default exclusiveMinimum"
-                  v-if="schema.exclusiveMinimum">(ex)minimum:{{ schema.exclusiveMinimum }}</span>
-            <span class="tag default maximum" v-if="schema.maximum !== undefined">maximum:{{ schema.maximum }}</span>
-            <span class="tag default exclusiveMaximum"
-                  v-if="schema.exclusiveMaximum">(ex)maximum:{{ schema.exclusiveMaximum }}</span>
-            <span class="tag default minLength" v-if="schema.minLength !== undefined">minimum length:{{ schema.minLength }}</span>
-            <span class="tag default maxLength" v-if="schema.maxLength !== undefined">maximum length:{{ schema.maxLength }}</span>
-            <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel"/>
-        </span>
+      <a class="title">
+        <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
+          :class="{ collapsed: isCollapsed }"></span>
+        {{ schema.title }}
+      </a>
+      <span class="tag default example" v-if="schema.examples != null && schema.examples.length > 0">example: {{
+        schema.examples[0] }}</span>
+      <span class="tag default default" v-if="schema.default != null">default: {{ schema.default }}</span>
+      <span class="tag default format" v-if="schema.format">({{ schema.format }})</span>
+      <span class="tag default minimum" v-if="schema.minimum !== undefined">minimum:{{ schema.minimum }}</span>
+      <span class="tag default exclusiveMinimum" v-if="schema.exclusiveMinimum">(ex)minimum:{{ schema.exclusiveMinimum
+      }}</span>
+      <span class="tag default maximum" v-if="schema.maximum !== undefined">maximum:{{ schema.maximum }}</span>
+      <span class="tag default exclusiveMaximum" v-if="schema.exclusiveMaximum">(ex)maximum:{{ schema.exclusiveMaximum
+      }}</span>
+      <span class="tag default minLength" v-if="schema.minLength !== undefined">minimum length:{{ schema.minLength
+      }}</span>
+      <span class="tag default maxLength" v-if="schema.maxLength !== undefined">maximum length:{{ schema.maxLength
+      }}</span>
+      <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel" />
+    </span>
 
 
     <!-- Array -->
     <div v-if="isArray" class="array">
       <a class="title">
         <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
-              :class="{collapsed: isCollapsed}"></span>
+          :class="{ collapsed: isCollapsed }"></span>
         {{ schema.title }}
         <span class="opening bracket">[</span>
-        <json-schema v-if="schema.items != null" :value="schema.items" :level="level + 1" :max-level="maxLevel"/>
+        <json-schema v-if="schema.items != null" :value="schema.items" :level="level + 1" :max-level="maxLevel" />
         <span class="closing bracket" v-if="isCollapsed">]</span>
       </a>
-      <span v-if="schema.minItems || schema.maxItems"
-            title="tag items range">({{ schema.minItems || 0 }}..{{ schema.maxItems || '∞' }})</span>
+      <span v-if="schema.minItems || schema.maxItems" title="tag items range">({{ schema.minItems || 0 }}..{{
+        schema.maxItems || '∞' }})</span>
       <span class="tag unique" hint--top aria-label="The items must be unique" v-if="schema.uniqueItems">♦</span>
 
-      <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel"/>
+      <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel" />
       <span class="closing bracket" v-if="!isCollapsed">]</span>
     </div>
 
     <!-- Object -->
     <div v-if="isObject" class="object">
-      <a class="title"><span
-          v-if="isCollapsible"
-          @click="toggleCollapse"
-          class="toggle-handle" :class="{collapsed: isCollapsed}"></span>
+      <a class="title"><span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
+          :class="{ collapsed: isCollapsed }"></span>
         {{ schema.title }}
-        <span v-if="schema.description != null" style="padding-right: 5px;" :class="{ 'hint--right': schema.description != null, 'hint': schema.description != null, 'hint--large': schema.description != null }" :aria-label="schema.description">(?)</span>
+        <span v-if="schema.description != null" style="padding-right: 5px;"
+          :class="{ 'hint--right': schema.description != null, 'hint': schema.description != null, 'hint--large': schema.description != null }"
+          :aria-label="schema.description">(?)</span>
         <span class="opening brace">{</span>
-        <span class="tag default" style="margin-left:5px"
-              v-if="isCollapsed && getParentExample != null">{{ getParentExample }}</span>
-        <span v-else-if="isCollapsed" class="collapsible-indicator"/>
+        <span class="tag default" style="margin-left:5px" v-if="isCollapsed && getParentExample != null">{{
+          getParentExample }}</span>
+        <span v-else-if="isCollapsed" class="collapsible-indicator" />
         <span class="closing brace" v-if="isCollapsed">}</span>
       </a>
 
       <span class="tag default" style="margin-left:5px" v-if="!isCollapsed && getParentExample != null"><i>example:</i> {{
-          getParentExample
-        }}</span>
+        getParentExample
+      }}</span>
       <div class="property" v-for="(property, propertyName) in schema.properties" :key="propertyName">
-                    <span class="name" :class="{ 'hint--right': property.description != null, 'hint': property.description != null, 'hint--large': property.description != null }" :aria-label="property.description">
-                                        <component v-if="property.type != 'null' && typeof(property.type) === 'string'"
-                                                   :is="`${property.type}-icon`"
-                                                   class="property-type" :aria-label="property.type"
-                                                   :title="property.type"/>
-                        {{ propertyName }}
-                         <span class="required" v-if="isRequired(property, propertyName)">*</span>
-                        :
+        <span class="name"
+          :class="{ 'hint--right': property.description != null, 'hint': property.description != null, 'hint--large': property.description != null }"
+          :aria-label="property.description">
+          <component v-if="property.type != 'null' && typeof (property.type) === 'string'" :is="`${property.type}-icon`"
+            class="property-type" :aria-label="property.type" :title="property.type" />
+          {{ propertyName }}
+          <span class="optional" v-if="!isRequired(property, propertyName)">(optional)</span>
+          :
 
-                                   </span>
-        <json-schema :value="property" :level="level + 1" :max-level="maxLevel"/>
+        </span>
+        <json-schema :value="property" :level="level + 1" :max-level="maxLevel" />
       </div>
 
       <div class="property" v-if="typeof schema.additionalProperties === 'object' && !isCollapsed">
-                <span class="name">
-                    <component
-                        v-if="schema.additionalProperties.type != 'null' && typeof(schema.additionalProperties.type) === 'string' "
-                        :is="`${schema.additionalProperties.type}-icon`" class="property-type"
-                        :aria-label="schema.additionalProperties.type"
-                        :title="schema.additionalProperties.type"/>
-                                        {{
-                    (schema.examples != null && schema.examples.length) > 0 ? Object.keys(schema.examples[0])[0] : 'exampleKey'
-                  }} :
-                </span>
-        <json-schema :value="schema.additionalProperties" :level="level + 1" :max-level="maxLevel"/>
+        <span class="name">
+          <component
+            v-if="schema.additionalProperties.type != 'null' && typeof (schema.additionalProperties.type) === 'string'"
+            :is="`${schema.additionalProperties.type}-icon`" class="property-type"
+            :aria-label="schema.additionalProperties.type" :title="schema.additionalProperties.type" />
+          {{
+            (schema.examples != null && schema.examples.length) > 0 ? Object.keys(schema.examples[0])[0] : 'exampleKey'
+          }} :
+        </span>
+        <json-schema :value="schema.additionalProperties" :level="level + 1" :max-level="maxLevel" />
 
       </div>
 
-      <json-schema-props v-if="schema && !isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel"/>
+      <json-schema-props v-if="schema && !isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel" />
       <span class="closeing brace" v-if="!isCollapsed">}</span>
     </div>
 
     <div class="columns is-gapless" v-if="schema.if && !isCollapsed"
-         style="border-bottom:1px solid #ddd;margin-bottom:10px;padding-bottom:10px">
+      style="border-bottom:1px solid #ddd;margin-bottom:10px;padding-bottom:10px">
       <div class="column">if
-        <json-schema :value="schema.if" :level="level + 1" :max-level="maxLevel"/>
+        <json-schema :value="schema.if" :level="level + 1" :max-level="maxLevel" />
       </div>
       <div v-if="schema.then" class="column">then
-        <json-schema :value="schema.then" :level="level + 1" :max-level="maxLevel"/>
+        <json-schema :value="schema.then" :level="level + 1" :max-level="maxLevel" />
       </div>
       <div v-if="schema.else" class="column">else
-        <json-schema :value="schema.else" :level="level + 1" :max-level="maxLevel"/>
+        <json-schema :value="schema.else" :level="level + 1" :max-level="maxLevel" />
       </div>
     </div>
   </div>
@@ -124,9 +125,9 @@ const primitiveArrayCollapsibleProps = ['allOf', 'anyOf', 'oneOf']
 export default {
   name: 'json-schema',
   props: {
-    value: {type: Object, required: true},
-    maxLevel: {type: Number, required: true},
-    level: {type: Number, default: 1}
+    value: { type: Object, required: true },
+    maxLevel: { type: Number, required: true },
+    level: { type: Number, default: 1 }
   },
   components: {
     'json-schema-props': () => import('./JsonSchemaProps'),
@@ -169,10 +170,10 @@ export default {
     },
     isPrimitive: function () {
       return this.schema &&
-          !this.schema.properties &&
-          !this.schema.items &&
-          this.schema.type !== 'array' &&
-          this.schema.type !== 'object'
+        !this.schema.properties &&
+        !this.schema.items &&
+        this.schema.type !== 'array' &&
+        this.schema.type !== 'object'
     },
     isArray: function () {
       return this.schema && this.schema.type === 'array'
@@ -183,7 +184,7 @@ export default {
   },
   created: async function () {
     if (this.level === 1) {
-      this.schema = await $RefParser.dereference(this.value, {resolve: {http: {headers: {'Origin': document.location.origin}, withCredentials: false}}})
+      this.schema = await $RefParser.dereference(this.value, { resolve: { http: { headers: { 'Origin': document.location.origin }, withCredentials: false } } })
     } else {
       this.schema = this.value
     }
@@ -304,7 +305,7 @@ $required: #F00;
     vertical-align: middle
   }
 
-  > * {
+  >* {
     font-size: $font-size;
   }
 
@@ -321,14 +322,17 @@ $required: #F00;
       content: "▼";
     }
 
-    &, &:hover {
+    &,
+    &:hover {
       text-decoration: none;
       color: $bold-color;
     }
   }
 
   .title {
-    &, &:hover {
+
+    &,
+    &:hover {
       text-decoration: none;
       color: $bold-color;
     }
@@ -338,7 +342,7 @@ $required: #F00;
     font-size: 0;
     display: table-row;
 
-    > * {
+    >* {
       font-size: $font-size;
       padding: .2em;
     }
@@ -356,6 +360,11 @@ $required: #F00;
 
   .required {
     color: $required;
+  }
+
+  .optional {
+    color: #444;
+    font-size: 70%;
   }
 
   .inner {
@@ -376,5 +385,4 @@ $required: #F00;
     }
   }
 }
-
 </style>
