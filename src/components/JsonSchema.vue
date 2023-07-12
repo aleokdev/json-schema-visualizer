@@ -8,7 +8,7 @@
       <a class="title">
         <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
           :class="{ collapsed: isCollapsed }"></span>
-        {{ schema.title }}
+        {{ schema.description }}
       </a>
       <span class="tag default example" v-if="schema.examples != null && schema.examples.length > 0">example: {{
         schema.examples[0] }}</span>
@@ -50,10 +50,7 @@
     <div v-if="isObject" class="object">
       <a class="title"><span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
           :class="{ collapsed: isCollapsed }"></span>
-        {{ schema.title }}
-        <span v-if="schema.description != null" style="padding-right: 5px;"
-          :class="{ 'hint--right': schema.description != null, 'hint': schema.description != null, 'hint--large': schema.description != null }"
-          :aria-label="schema.description">(?)</span>
+        <span v-if="schema.description">{{ schema.description }}<br /></span>
         <span class="opening brace">{</span>
         <span class="tag default" style="margin-left:5px" v-if="isCollapsed && getParentExample != null">{{
           getParentExample }}</span>
@@ -65,9 +62,7 @@
         getParentExample
       }}</span>
       <div class="property" v-for="(property, propertyName) in schema.properties" :key="propertyName">
-        <span class="name"
-          :class="{ 'hint--right': property.description != null, 'hint': property.description != null, 'hint--large': property.description != null }"
-          :aria-label="property.description">
+        <span class="name">
           <component v-if="property.type != 'null' && typeof (property.type) === 'string'" :is="`${property.type}-icon`"
             class="property-type" :aria-label="property.type" :title="property.type" />
           {{ propertyName }}
@@ -334,7 +329,7 @@ $required: #F00;
     &,
     &:hover {
       text-decoration: none;
-      color: $bold-color;
+      color: #222;
     }
   }
 
