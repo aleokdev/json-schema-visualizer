@@ -51,6 +51,7 @@
   const urlParams = new URLSearchParams(window.location.search);
 
   const correctRules = (value) => {
+    if (value == null) { return; }
     if (value["allOf"] !== undefined && value["allOf"].length === 1) {
       value["$ref"] = value["allOf"][0]["$ref"];
       value["allOf"] = undefined;
