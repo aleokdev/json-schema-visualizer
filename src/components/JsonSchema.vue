@@ -34,6 +34,7 @@
         <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
           :class="{ collapsed: isCollapsed }"></span>
         {{ schema.title }}
+        <span v-if="schema.description">{{ schema.description }}<br /></span>
         <span class="opening bracket">[</span>
         <json-schema v-if="schema.items != null" :value="schema.items" :level="level + 1" :max-level="maxLevel" />
         <span class="closing bracket" v-if="isCollapsed">]</span>
