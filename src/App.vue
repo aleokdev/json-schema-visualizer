@@ -56,6 +56,13 @@
       value["$ref"] = value["allOf"][0]["$ref"];
       value["allOf"] = undefined;
     }
+    if (value["anyOf"] !== undefined) {
+      value["anyOf"] = value["anyOf"].filter(item => item["type"] === undefined || item["type"] != "null");
+    }
+    if (value["anyOf"] !== undefined && value["anyOf"].length === 1) {
+      value["$ref"] = value["anyOf"][0]["$ref"];
+      value["anyOf"] = undefined;
+    }
     for(const child of Object.values(value)) {
       if(typeof(child) === "object") {
         correctRules(child);
