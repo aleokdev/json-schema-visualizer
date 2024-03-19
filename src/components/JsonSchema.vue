@@ -6,8 +6,6 @@
     <!-- Primitive -->
     <span v-if="isPrimitive">
       <a class="title">
-        <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
-          :class="{ collapsed: isCollapsed }"></span>
         {{ schema.description }}
       </a>
       <span class="tag default example" v-if="schema.examples != null && schema.examples.length > 0">example: {{
@@ -24,27 +22,25 @@
       }}</span>
       <span class="tag default maxLength" v-if="schema.maxLength !== undefined">maximum length:{{ schema.maxLength
       }}</span>
-      <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel" />
+      <json-schema-props :value="schema" :level="level" :max-level="999" />
     </span>
 
 
     <!-- Array -->
     <div v-if="isArray" class="array">
       <a class="title">
-        <span v-if="isCollapsible" @click="toggleCollapse" class="toggle-handle"
-          :class="{ collapsed: isCollapsed }"></span>
         {{ schema.title }}
         <span v-if="schema.description">{{ schema.description }}<br /></span>
         <span class="opening bracket">[</span>
         <json-schema v-if="schema.items != null" :value="schema.items" :level="level + 1" :max-level="maxLevel" />
-        <span class="closing bracket" v-if="isCollapsed">]</span>
+        
       </a>
       <span v-if="schema.minItems || schema.maxItems" title="tag items range">({{ schema.minItems || 0 }}..{{
         schema.maxItems || '∞' }})</span>
       <span class="tag unique" hint--top aria-label="The items must be unique" v-if="schema.uniqueItems">♦</span>
 
-      <json-schema-props v-if="!isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel" />
-      <span class="closing bracket" v-if="!isCollapsed">]</span>
+      <json-schema-props :value="schema" :level="level + 1" :max-level="maxLevel" />
+      <div class="closing bracket">]</div>
     </div>
 
     <!-- Object -->
@@ -62,7 +58,7 @@
       <span class="tag default" style="margin-left:5px" v-if="!isCollapsed && getParentExample != null"><i>example:</i> {{
         getParentExample
       }}</span>
-      <div class="property" v-for="(property, propertyName) in schema.properties" :key="propertyName">
+      <div class="property" v-if="!isCollapsed" v-for="(property, propertyName) in schema.properties" :key="propertyName">
         <span class="name">
           <component v-if="property.type != 'null' && typeof (property.type) === 'string'" :is="`${property.type}-icon`"
             class="property-type" :aria-label="property.type" :title="property.type" />
@@ -88,7 +84,7 @@
 
       </div>
 
-      <json-schema-props v-if="schema && !isCollapsed" :value="schema" :level="currentLevel" :max-level="maxLevel" />
+      <json-schema-props v-if="schema && !isCollapsed" :value="schema" :level="level + 1" :max-level="maxLevel" />
       <span class="closeing brace" v-if="!isCollapsed">}</span>
     </div>
 
@@ -133,8 +129,7 @@ export default {
     return {
       loading: false,
       schema: false,
-      isCollapsed: true,
-      currentLevel: this.level
+      isCollapsed: true
     }
   },
   computed: {
@@ -189,7 +184,6 @@ export default {
   methods: {
     toggleCollapse: function () {
       this.isCollapsed = !this.isCollapsed
-      this.currentLevel = 0
     },
     isRequired: function (property, name) {
       const schema = this.schema
@@ -368,10 +362,6 @@ $required: #F00;
   }
 
   &.collapsed {
-    .property {
-      display: none;
-    }
-
     .closeing.brace {
       display: inline-block;
     }
